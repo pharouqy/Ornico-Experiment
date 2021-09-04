@@ -1,4 +1,14 @@
+const cartBtn1 = document.querySelector("span#plus");
+const cartBtn2 = document.querySelector("a.btn");
+const nameTeddy = document.querySelector("h2#nameTeddy");
+const picTeddy = document.getElementById("imgTeddy");
+const qty = document.getElementById("value");
+const priceTeddy = document.getElementById("priceTeddy");
+const id = recupUrl();
+
 recupProduct(recupUrl());
+addeDataToCart();
+cartSum();
 
 function recupUrl() {
   //Retrieve the url
@@ -19,6 +29,54 @@ function conveter(amount) {
   return priceConverted;
 }
 
+function cartSum() {
+  //cart function
+  //const cartBtn = document.querySelector(".btn");
+  const numberCart = document.getElementById("value");
+  let compteur = 0;
+  cartBtn1.addEventListener("click", function () {
+    compteur++;
+    numberCart.innerHTML = compteur;
+    return compteur;
+  });
+}
+
+//data for cart
+function addeDataToCart() {
+  cartBtn2.addEventListener("click", function () {
+    class ObjtCart {
+      constructor(nameT, priceT, qyt, picT, _id) {
+        this.nameT = nameT;
+        this.priceT = priceT;
+        this.qyt = qyt;
+        this.picT = picT;
+        this._id = _id;
+      }
+    }
+
+    let newObect = new ObjtCart(
+      nameTeddy.innerHTML,
+      //retrieve the two number of string and converted to number
+      parseFloat(priceTeddy.innerHTML.substr(0, 2)),
+      parseInt(qty.innerHTML),
+      picTeddy.src,
+      id
+    );
+    let arrayData = JSON.parse(localStorage.getItem("data"));
+    //Store data in local strorage
+    if (localStorage.getItem("data") !== null) {
+      arrayData.push(newObect);
+      localStorage.setItem("data", JSON.stringify(arrayData));
+      window.location.href = "cart.html";
+    } else {
+      arrayData = [];
+      arrayData.push(newObect);
+      localStorage.setItem("data", JSON.stringify(arrayData));
+      window.location.href = "cart.html";
+    }
+  });
+}
+
 function recupProduct(id) {
   fetch(`http://localhost:3000/api/teddies/${id}`)
     .then(function (res) {
@@ -29,23 +87,16 @@ function recupProduct(id) {
     .then(function (teddy) {
       const displayTeddy = document.getElementById("display_product");
       //retrieve the name's teddy
-      const nameTeddy = document.createElement("h2");
-      nameTeddy.textContent = teddy.name;
-      displayTeddy.appendChild(nameTeddy);
+      nameTeddy.innerHTML = teddy.name;
       //retrieve the description's teddy
-      const descTeddy = document.createElement("p");
-      descTeddy.textContent = teddy.description;
-      displayTeddy.appendChild(descTeddy);
+      const descTeddy = document.getElementById("descr");
+      descTeddy.innerHTML = teddy.description;
       //retrieve the picture's teddy
-      const picTeddy = document.createElement("img");
       picTeddy.src = teddy.imageUrl;
       picTeddy.classList.add("resize");
-      displayTeddy.appendChild(picTeddy);
       //retrieve the price's teddy converted
       const resultPrice = conveter(teddy.price);
-      const priceTeddy = document.createElement("h4");
-      priceTeddy.textContent = resultPrice;
-      displayTeddy.appendChild(priceTeddy);
+      priceTeddy.innerHTML = resultPrice;
       //Display colors of teddies
       for (let color in teddy.colors) {
         const select_colors = document.getElementById("select_colors");
@@ -55,12 +106,6 @@ function recupProduct(id) {
         select_colors.appendChild(option_colors);
         displayTeddy.appendChild(select_colors);
       }
-      //Add to the cart
-      const cart = document.createElement("a");
-      displayTeddy.appendChild(cart);
-      cart.classList.add("btn");
-      cart.classList.add("btn-success");
-      cart.textContent = "Add to cart";
     })
     .catch(function (err) {
       console.log("Erreur de réception");
