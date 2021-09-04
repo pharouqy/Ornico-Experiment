@@ -41,15 +41,53 @@ function cartSum() {
   });
 }
 
+//secours
+/*function addeDataToCart() {
+  cartBtn2.addEventListener("click", function () {
+    //Store data in local strorage
+    if (qty.innerHTML !== "0") {
+      class ObjtCart {
+        constructor(name, price, quantity, _id) {
+          this.name = name;
+          this.price = price;
+          this.quantity = parsInt(quantity);
+          this._id = _id;
+        }
+      }
+      let newObect = new ObjtCart(
+        nameTeddy.innerHTML,
+        //retrieve the two number of string and converted to number
+        priceTeddy.innerHTML,
+        qty.innerHTML,
+        id
+      );
+      console.log(newObect);
+      let arrayData = JSON.parse(localStorage.getItem("data"));
+      if (localStorage.getItem("data") !== null) {
+        arrayData.push(newObect);
+        localStorage.setItem("data", JSON.stringify(arrayData));
+        window.location.href = "cart.html";
+      } else {
+        arrayData = [];
+        arrayData.push(newObect);
+        localStorage.setItem("data", JSON.stringify(arrayData));
+        window.location.href = "cart.html";
+      }
+    } else {
+      document.write("Panier vide");
+    }
+  });
+}*/
+
 //data for cart
 function addeDataToCart() {
   cartBtn2.addEventListener("click", function () {
     class ObjtCart {
-      constructor(nameT, priceT, qyt, picT, _id) {
-        this.nameT = nameT;
-        this.priceT = priceT;
-        this.qyt = qyt;
-        this.picT = picT;
+      constructor(name, price, quantity, _id) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        //this.picT = picT;
         this._id = _id;
       }
     }
@@ -59,7 +97,6 @@ function addeDataToCart() {
       //retrieve the two number of string and converted to number
       parseFloat(priceTeddy.innerHTML.substr(0, 2)),
       parseInt(qty.innerHTML),
-      picTeddy.src,
       id
     );
     let arrayData = JSON.parse(localStorage.getItem("data"));
@@ -95,8 +132,8 @@ function recupProduct(id) {
       picTeddy.src = teddy.imageUrl;
       picTeddy.classList.add("resize");
       //retrieve the price's teddy converted
-      const resultPrice = conveter(teddy.price);
-      priceTeddy.innerHTML = resultPrice;
+      const resultPrice = teddy.price;
+      priceTeddy.innerHTML = conveter(resultPrice);
       //Display colors of teddies
       for (let color in teddy.colors) {
         const select_colors = document.getElementById("select_colors");
