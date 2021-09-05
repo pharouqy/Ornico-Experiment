@@ -83,11 +83,11 @@ function cartSum() {
 function addeDataToCart() {
   cartBtn2.addEventListener("click", function () {
     class ObjtCart {
-      constructor(name, price, quantity, _id) {
+      constructor(name, price, quantity, picT, _id) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        //this.picT = picT;
+        this.picT = picT;
         this._id = _id;
       }
     }
@@ -97,6 +97,7 @@ function addeDataToCart() {
       //retrieve the two number of string and converted to number
       parseFloat(priceTeddy.innerHTML.substr(0, 2)),
       parseInt(qty.innerHTML),
+      picTeddy.src,
       id
     );
     let arrayData = JSON.parse(localStorage.getItem("data"));

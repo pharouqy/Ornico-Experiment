@@ -1,14 +1,14 @@
 let arrayData = JSON.parse(localStorage.getItem("data"));
 
-//create a table to send for server
-let tableOfIds = [];
-for (let i = 0; i < arrayData.length; i++) {
-  tableOfIds.push(arrayData[i]["_id"]);
-}
-
 diplayDaata();
 priceTotal();
 clearStorage();
+
+//create a table to send for server
+let tableOfIds = [];
+  for (table of tableOfIds) {
+    tableOfIds.push(arrayData[table]["_id"]);
+}
 
 //Display the data on the web page
 function diplayDaata() {
@@ -17,7 +17,7 @@ function diplayDaata() {
       let name = arrayData[data].name;
       let price = arrayData[data].price;
       let quantite = arrayData[data].quantity;
-      //const picture = arrayData[data].picT;
+      const picture = arrayData[data].picT;
       /*document.getElementById("name").innerHTML = name;
       document.getElementById("img").src = picture;
       document.getElementById("price").innerText = price;
@@ -31,7 +31,7 @@ function diplayDaata() {
         <div class="media align-items-center">
           <img
             id="img"
-            src=""
+            src="${picture}"
             class="d-block ui-w-40 ui-bordered mr-4"
             alt=""
           />
@@ -88,10 +88,12 @@ function priceTotal() {
 }
 function clearStorage() {
   //clear localstorage
-  document.getElementById("X").addEventListener("click", function () {
-    localStorage.clear();
-    window.location.href = "cart.html";
-  });
+  if (document.getElementById("X") !== null) {
+    document.getElementById("X").addEventListener("click", function () {
+      localStorage.clear();
+      window.location.href = "cart.html";
+    });
+  }
 }
 //check input order
 const submitInput = document.getElementById("submit");
@@ -146,10 +148,12 @@ submitInput.addEventListener("click", function (e) {
       .then(function (value) {
         localStorage.clear();
         console.log(value);
-        localStorage.setItem("orderId", value.orderId);
+        const orderId = localStorage.setItem("orderId", value.orderId);
         localStorage.setItem("firstName", value.contact["firstName"]);
         localStorage.setItem("lastName", value.contact["lastName"]);
-        window.location.href = "confirm.html";
+        const idRetrieve = localStorage.getItem("orderId");
+        console.log(idRetrieve);
+        window.location.href = `confirm.html?order=${idRetrieve}`;
       })
       .catch(function (erreur) {
         console.log(erreur);

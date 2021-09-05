@@ -65,3 +65,14 @@ body{
   .btn-submit:hover {
     background-color: #090909 !important;
   }
+  p#display_confirm {
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    font-size: xx-large;
+    font-weight: bold;
+}
