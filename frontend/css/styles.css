@@ -7,8 +7,7 @@ li.nav-item {
     font-size: 50px;
 }
 span#plus {
-    font-size: 50px;
-    font-weight: 900;
+    font-size: 15px;
     cursor: pointer;
 }
 body{

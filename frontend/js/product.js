@@ -10,6 +10,17 @@ recupProduct(recupUrl());
 addeDataToCart();
 cartSum();
 
+//object product
+class ObjtCart {
+  constructor(name, price, quantity, picT, _id) {
+    this.name = name;
+    this.price = price;
+    this.quantity = quantity;
+    this.picT = picT;
+    this._id = _id;
+  }
+}
+
 function recupUrl() {
   //Retrieve the url
   const urlParams = new URLSearchParams(window.location.search);
@@ -41,57 +52,9 @@ function cartSum() {
   });
 }
 
-//secours
-/*function addeDataToCart() {
-  cartBtn2.addEventListener("click", function () {
-    //Store data in local strorage
-    if (qty.innerHTML !== "0") {
-      class ObjtCart {
-        constructor(name, price, quantity, _id) {
-          this.name = name;
-          this.price = price;
-          this.quantity = parsInt(quantity);
-          this._id = _id;
-        }
-      }
-      let newObect = new ObjtCart(
-        nameTeddy.innerHTML,
-        //retrieve the two number of string and converted to number
-        priceTeddy.innerHTML,
-        qty.innerHTML,
-        id
-      );
-      console.log(newObect);
-      let arrayData = JSON.parse(localStorage.getItem("data"));
-      if (localStorage.getItem("data") !== null) {
-        arrayData.push(newObect);
-        localStorage.setItem("data", JSON.stringify(arrayData));
-        window.location.href = "cart.html";
-      } else {
-        arrayData = [];
-        arrayData.push(newObect);
-        localStorage.setItem("data", JSON.stringify(arrayData));
-        window.location.href = "cart.html";
-      }
-    } else {
-      document.write("Panier vide");
-    }
-  });
-}*/
-
 //data for cart
 function addeDataToCart() {
   cartBtn2.addEventListener("click", function () {
-    class ObjtCart {
-      constructor(name, price, quantity, picT, _id) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.picT = picT;
-        this._id = _id;
-      }
-    }
-
     let newObect = new ObjtCart(
       nameTeddy.innerHTML,
       //retrieve the two number of string and converted to number
@@ -102,15 +65,20 @@ function addeDataToCart() {
     );
     let arrayData = JSON.parse(localStorage.getItem("data"));
     //Store data in local strorage
-    if (localStorage.getItem("data") !== null) {
-      arrayData.push(newObect);
-      localStorage.setItem("data", JSON.stringify(arrayData));
-      window.location.href = "cart.html";
-    } else {
-      arrayData = [];
-      arrayData.push(newObect);
-      localStorage.setItem("data", JSON.stringify(arrayData));
-      window.location.href = "cart.html";
+    if (qty.innerHTML !== "0") { //if cart isn't empty
+      if (localStorage.getItem("data") !== null) {
+        arrayData.push(newObect);
+        localStorage.setItem("data", JSON.stringify(arrayData));
+        window.location.href = "cart.html";
+        console.log("il y'a")
+  
+      } else {
+        let arrayData = [];
+        arrayData.push(newObect);
+        localStorage.setItem("data", JSON.stringify(arrayData));
+        window.location.href = "cart.html";
+        console.log("il y'a pas")
+      }
     }
   });
 }

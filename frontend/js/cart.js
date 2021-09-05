@@ -6,8 +6,12 @@ clearStorage();
 
 //create a table to send for server
 let tableOfIds = [];
+if (arrayData !== []) {
   for (table of tableOfIds) {
     tableOfIds.push(arrayData[table]["_id"]);
+  }
+} else {
+  console.log("panier est vide");
 }
 
 //Display the data on the web page
@@ -26,6 +30,7 @@ function diplayDaata() {
       let totaux = 0;
       totaux += total;
       let tBody = document.getElementsByTagName("tbody")[0];
+      //display data on web page
       tBody.innerHTML += `<tr>
       <td class="p-4">
         <div class="media align-items-center">
@@ -110,57 +115,53 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 submitInput.addEventListener("click", function (e) {
-  if (
-    firstNameInput.value &&
-    lastNameInput.value &&
-    validateEmail(emailInput.value) &&
-    cityInput.value &&
-    emailInput.value
-  ) {
-    arrayDataDisplay = [];
-    arrayDataDisplay.push(arrayData);
-    //create the object to send
-    let objectToSend = {
-      contact: {
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value,
-        address: adressInput.value,
-        city: cityInput.value,
-        email: emailInput.value,
-      },
-      products: tableOfIds,
-    };
-    let jsonOrder = JSON.stringify(objectToSend);
-    erreurDisplay.innerHTML = ``;
-    console.log(jsonOrder);
-    fetch("http://localhost:3000/api/teddies/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(objectToSend),
-    })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
+    if (
+      firstNameInput.value &&
+      lastNameInput.value &&
+      validateEmail(emailInput.value) &&
+      cityInput.value &&
+      emailInput.value
+    ) {
+      //create the object to send
+      let objectToSend = {
+        contact: {
+          firstName: firstNameInput.value,
+          lastName: lastNameInput.value,
+          address: adressInput.value,
+          city: cityInput.value,
+          email: emailInput.value,
+        },
+        products: tableOfIds,
+      };
+      let jsonOrder = JSON.stringify(objectToSend);
+      erreurDisplay.innerHTML = ``;
+      console.log(jsonOrder);
+      fetch("http://localhost:3000/api/teddies/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(objectToSend),
       })
-      .then(function (value) {
-        localStorage.clear();
-        console.log(value);
-        const orderId = localStorage.setItem("orderId", value.orderId);
-        localStorage.setItem("firstName", value.contact["firstName"]);
-        localStorage.setItem("lastName", value.contact["lastName"]);
-        const idRetrieve = localStorage.getItem("orderId");
-        console.log(idRetrieve);
-        window.location.href = `confirm.html?order=${idRetrieve}`;
-      })
-      .catch(function (erreur) {
-        console.log(erreur);
-      });
-  } else if (!validateEmail(emailInput.value)) {
-    erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp en vérifiant le bon format d'email</h1>`;
-  } else {
-    erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp</h1>`;
-  }
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then(function (value) {
+          localStorage.clear();
+          const orderId = localStorage.setItem("orderId", value.orderId);
+          localStorage.setItem("firstName", value.contact["firstName"]);
+          localStorage.setItem("lastName", value.contact["lastName"]);
+          const idRetrieve = localStorage.getItem("orderId");
+          window.location.href = `confirm.html?order=${idRetrieve}`;
+        })
+        .catch(function (erreur) {
+          console.log(erreur);
+        });
+    } else if (!validateEmail(emailInput.value)) {
+      erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp en vérifiant le bon format d'email</h1>`;
+    } else {
+      erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp</h1>`;
+    }
 });
