@@ -22,10 +22,6 @@ function diplayDaata() {
       let price = arrayData[data].price;
       let quantite = arrayData[data].quantity;
       const picture = arrayData[data].picT;
-      /*document.getElementById("name").innerHTML = name;
-      document.getElementById("img").src = picture;
-      document.getElementById("price").innerText = price;
-      document.getElementById("quantite").value = quantite;*/
       const total = price * quantite;
       let totaux = 0;
       totaux += total;
@@ -96,7 +92,7 @@ function clearStorage() {
   if (document.getElementById("X") !== null) {
     document.getElementById("X").addEventListener("click", function () {
       localStorage.clear();
-      window.location.href = "cart.html";
+      window.location.href = "index.html";
     });
   }
 }

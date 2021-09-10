@@ -24,6 +24,7 @@ class ObjtCart {
 function recupUrl() {
   //Retrieve the url
   const urlParams = new URLSearchParams(window.location.search);
+  console.log(window.location.search);
   //Retrieve the id from the url
   const id = urlParams.get("id");
   return id;
@@ -73,7 +74,7 @@ function addeDataToCart() {
         console.log("il y'a")
   
       } else {
-        let arrayData = [];
+        arrayData = [];
         arrayData.push(newObect);
         localStorage.setItem("data", JSON.stringify(arrayData));
         window.location.href = "cart.html";

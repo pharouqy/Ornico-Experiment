@@ -9,14 +9,11 @@ function recupUrl() {
   return id;
 }
 
-const idRecup = recupUrl();
-
 displayThankful();
-
-
 
 function displayThankful() {
     if (infoConfirmFirst !== null && infoConfirmLast !== null) {
+            const idRecup = recupUrl();
             document.getElementById(
               "display_confirm"
             ).innerHTML = `Bonjour ${infoConfirmFirst} ${infoConfirmLast}, Merci D'avoir Pris Commande Chez Ornico, Votre Numéro De Commande est le : ${idRecup}`;
