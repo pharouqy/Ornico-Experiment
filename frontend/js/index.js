@@ -13,7 +13,7 @@ function recuperer() {
     .then(function (teddies) {
       const card = document.getElementById("display");
       //itterations throught the object
-        for (let teddy in teddies) {
+      for (let teddy in teddies) {
         //display name
         let nameTeddy = document.createElement("h2");
         card.appendChild(nameTeddy);
@@ -32,6 +32,10 @@ function recuperer() {
         card.appendChild(url);
         url.href = `product.html?id=${teddies[teddy]._id}`;
         url.textContent = "Détails";
+        //image clickable
+        let parent = pic.parentNode;
+        parent.replaceChild(url, pic);
+        url.appendChild(pic);
         //display price
         let price = document.createElement("span");
         card.appendChild(price);
@@ -44,6 +48,6 @@ function recuperer() {
         };
         let priceConverted = priceN.toLocaleString("fr-FR", myObj);
         price.textContent = priceConverted;
-        }
-      });
+      }
+    });
 }

@@ -1,8 +1,19 @@
 let arrayData = JSON.parse(localStorage.getItem("data"));
 
+//check input order
+const submitInput = document.getElementById("submit");
+const firstNameInput = document.getElementById("firstName");
+const lastNameInput = document.getElementById("lastName");
+const adressInput = document.getElementById("adress");
+const cityInput = document.getElementById("city");
+const emailInput = document.getElementById("email");
+const erreurDisplay = document.getElementById("erreur");
+
 diplayDaata();
+clearItem();
+sendDataToApi();
 priceTotal();
-clearStorage();
+//clearStorage();
 
 //create a table to send for server
 let tableOfIds = [];
@@ -67,10 +78,10 @@ function diplayDaata() {
       <a
         id="X"
         href="#"
-        class="shop-tooltip close float-none text-danger"
+        class="delete shop-tooltip close float-none text-danger"
         title=""
         data-original-title="Remove"
-        >X</a>
+        >Supprimer le produit</a>
     </td>
   </tr>`;
     }
@@ -87,36 +98,53 @@ function priceTotal() {
   document.getElementById("totals").innerHTML = `Total = ${sum}`;
   return sum;
 }
-function clearStorage() {
-  //clear localstorage
-  if (document.getElementById("X") !== null) {
-    document.getElementById("X").addEventListener("click", function () {
-      localStorage.clear();
-      window.location.href = "index.html";
+
+function clearItem() {
+  const btnDelete = document.querySelectorAll(".delete");
+  console.log(btnDelete);
+  // boucler sur le tableau de btn
+  for (let i = 0; i < btnDelete.length; i++) {
+    //crée une constante qui recupere le tableau des btn html
+    btnDelete[i].addEventListener("click", (e) => {
+      e.preventDefault();
+      //recuperer le name du produit
+      console.log(arrayData);
+      let nameDelete = arrayData[i].name;
+      console.log(nameDelete);
+      //utiliser la methode filter qui boucle sur l'array et retourne un tableau des element a ne pas supprimer
+      arrayDataCheck = arrayData.filter((el) => el.name !== nameDelete);
+      //mettre le tableau retourner dans le local storage encore une fois
+      localStorage.setItem("data", JSON.stringify(arrayDataCheck));
+      window.location.href = "cart.html";
     });
   }
 }
-//check input order
-const submitInput = document.getElementById("submit");
-const firstNameInput = document.getElementById("firstName");
-const lastNameInput = document.getElementById("lastName");
-const adressInput = document.getElementById("adress");
-const cityInput = document.getElementById("city");
-const emailInput = document.getElementById("email");
-const erreurDisplay = document.getElementById("erreur");
+
+/*function clearStorage() {
+  //clear localstorage
+  if (document.getElementById("X") != null) {
+    document.getElementById("X").addEventListener("click", function () {
+      localStorage.removeItem("data");
+      window.location.href = "index.html";
+    });
+  }
+}*/
+
 //regex to check the email
 function validateEmail(email) {
   const re =
     /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   return re.test(String(email).toLowerCase());
 }
-submitInput.addEventListener("click", function (e) {
+
+function sendDataToApi() {
+  submitInput.addEventListener("click", function (e) {
     if (
-      firstNameInput.value &&
-      lastNameInput.value &&
-      validateEmail(emailInput.value) &&
-      cityInput.value &&
-      emailInput.value
+      firstNameInput.value.toString().trim() &&
+      lastNameInput.value.toString().trim() &&
+      validateEmail(emailInput.value).toString().trim() &&
+      cityInput.value.toString().trim() &&
+      emailInput.value.toString().trim()
     ) {
       //create the object to send
       let objectToSend = {
@@ -131,7 +159,6 @@ submitInput.addEventListener("click", function (e) {
       };
       let jsonOrder = JSON.stringify(objectToSend);
       erreurDisplay.innerHTML = ``;
-      console.log(jsonOrder);
       fetch("http://localhost:3000/api/teddies/order", {
         method: "POST",
         headers: {
@@ -160,4 +187,5 @@ submitInput.addEventListener("click", function (e) {
     } else {
       erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp</h1>`;
     }
-});
+  });
+}

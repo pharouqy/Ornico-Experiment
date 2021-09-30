@@ -24,9 +24,9 @@ class ObjtCart {
 function recupUrl() {
   //Retrieve the url
   const urlParams = new URLSearchParams(window.location.search);
-  console.log(window.location.search);
   //Retrieve the id from the url
   const id = urlParams.get("id");
+  console.log(id);
   return id;
 }
 
@@ -53,32 +53,56 @@ function cartSum() {
   });
 }
 
+/*function addCartSameProduct () {
+  for (array in arrayData) {
+    console.log(arrayData);
+    if (parseInt(qty.innerHTML) > 0 && nameTeddy.innerHTML == arrayData[array].name) {
+      qtyTotal = 0;
+      qtyTotal += parseInt(arrayData[array].quantity);
+      console.log("console 1", parseInt(arrayData[array].quantity));
+      return qtyTotal;
+    } else {
+      console.log("console 2", qty.innerHTML);
+      return parseInt(qty.innerHTML);
+    }
+  }
+}*/
+
 //data for cart
 function addeDataToCart() {
-  cartBtn2.addEventListener("click", function () {
-    let newObect = new ObjtCart(
+  cartBtn2.addEventListener("click", () => {
+    let arrayData = JSON.parse(localStorage.getItem("data"));
+    let newObject = new ObjtCart(
       nameTeddy.innerHTML,
       //retrieve the two number of string and converted to number
       parseFloat(priceTeddy.innerHTML.substr(0, 2)),
-      parseInt(qty.innerHTML),
+      qty.innerHTML,
       picTeddy.src,
       id
     );
-    let arrayData = JSON.parse(localStorage.getItem("data"));
     //Store data in local strorage
-    if (qty.innerHTML !== "0") { //if cart isn't empty
-      if (localStorage.getItem("data") !== null) {
-        arrayData.push(newObect);
-        localStorage.setItem("data", JSON.stringify(arrayData));
-        window.location.href = "cart.html";
-        console.log("il y'a")
-  
-      } else {
+    if (qty.innerHTML !== "0") {
+      //if cart isn't empty
+      if (localStorage.getItem("data") === null) {
         arrayData = [];
-        arrayData.push(newObect);
+        arrayData.push(newObject);
         localStorage.setItem("data", JSON.stringify(arrayData));
         window.location.href = "cart.html";
-        console.log("il y'a pas")
+      } else {
+        let flagId = false;
+        for (array in arrayData) {
+          if (nameTeddy.innerHTML === arrayData[array].name) {
+            arrayData[array].quantity =
+              parseInt(arrayData[array].quantity) + parseInt(qty.innerHTML);
+            flagId = true;
+            break;
+          }
+        }
+        if (flagId == false) {
+          arrayData.push(newObject);
+        }
+        localStorage.setItem("data", JSON.stringify(arrayData));
+        window.location.href = "cart.html";
       }
     }
   });
