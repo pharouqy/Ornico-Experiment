@@ -1,5 +1,9 @@
+img.resize:hover {
+  transform: scale(1.5);
+}
 img.resize {
-    max-width: 250px;
+  max-width: 250px;
+  transition: transform 1s;
 }
 li.nav-item {
     display: flex;

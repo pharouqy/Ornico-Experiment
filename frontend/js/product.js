@@ -1,4 +1,5 @@
 const cartBtn1 = document.querySelector("span#plus");
+const cartBtn3 = document.querySelector("span#moins");
 const cartBtn2 = document.querySelector("a.btn");
 const nameTeddy = document.querySelector("h2#nameTeddy");
 const picTeddy = document.getElementById("imgTeddy");
@@ -48,6 +49,11 @@ function cartSum() {
   let compteur = 0;
   cartBtn1.addEventListener("click", function () {
     compteur++;
+    numberCart.innerHTML = compteur;
+    return compteur;
+  });
+  cartBtn3.addEventListener("click", function () {
+    compteur--;
     numberCart.innerHTML = compteur;
     return compteur;
   });
