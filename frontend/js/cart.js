@@ -112,7 +112,7 @@ function clearItem() {
       let nameDelete = arrayData[i].name;
       console.log(nameDelete);
       //utiliser la methode filter qui boucle sur l'array et retourne un tableau des element a ne pas supprimer
-      arrayDataCheck = arrayData.filter((el) => el.name !== nameDelete);
+      arrayDataCheck = arrayData.filter((el) => el.name !== nameDelete);//retourne un tableau des elements qui ne corespondent pas a nameDelete
       //mettre le tableau retourner dans le local storage encore une fois
       localStorage.setItem("data", JSON.stringify(arrayDataCheck));
       window.location.href = "cart.html";

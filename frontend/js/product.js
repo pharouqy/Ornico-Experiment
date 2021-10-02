@@ -89,16 +89,21 @@ function addeDataToCart() {
         localStorage.setItem("data", JSON.stringify(arrayData));
         window.location.href = "cart.html";
       } else {
+        //Script pour accumuler la quantités des produit identique dans le panier
         let flagId = false;
+        //aditionner les quantité des produit identique dans le local storage
         for (array in arrayData) {
+          //Si le nom du produit corespond entre le localstorage et le produit choisie
           if (nameTeddy.innerHTML === arrayData[array].name) {
+            //j'aditionne la quantiter entre celle dans le local storage et la quantite du nouveau produit
+            //j'actualise la quantite initial du local storage
             arrayData[array].quantity =
               parseInt(arrayData[array].quantity) + parseInt(qty.innerHTML);
             flagId = true;
             break;
           }
         }
-        if (flagId == false) {
+        if (flagId == false) {//Si le produit n'est pas dupliquer dans local storage
           arrayData.push(newObject);
         }
         localStorage.setItem("data", JSON.stringify(arrayData));
