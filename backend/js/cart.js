@@ -32,7 +32,6 @@ function diplayDaata() {
       let name = arrayData[data].name;
       let price = arrayData[data].price;
       let quantite = arrayData[data].quantity;
-      const color = arrayData[data].color;
       const picture = arrayData[data].picT;
       const total = price * quantite;
       let totaux = 0;
@@ -49,7 +48,7 @@ function diplayDaata() {
             alt=""
           />
           <div class="media-body">
-            <a href="#" class="d-block text-dark name-colors">${name} -//- ${color}</a>
+            <a href="#" class="d-block text-dark" id="name">${name}</a>
             <small>
               <span class="text-muted"></span>
               <span class="align-text-bottom"></span>
@@ -64,10 +63,10 @@ function diplayDaata() {
       >${price}</td>
       <td class="align-middle p-4">
         <input
-          type="number"
-          class="form-control text-center quantite"
+          type="text"
+          class="form-control text-center"
           value="${quantite}"
-          onchange="SetSelectedValue()"
+          id="quantite"
         />
       </td>
       <td
@@ -88,41 +87,6 @@ function diplayDaata() {
     }
   }
 }
-
-function SetSelectedValue() {
-  let values = document.getElementsByClassName("quantite");
-  for (let i = 0; i < values.length; i++) {
-    let x = values[i].value;
-    console.log("x =>", x);
-    let quantite = arrayData[i].quantity;
-    console.log("qyt =>", quantite);
-    const compare = document.getElementsByClassName("name-colors")[i].innerHTML;
-    console.log("colors-name =>", compare);
-    if (
-      x !== quantite &&
-      arrayData[i].name + " -//- " + arrayData[i].color === compare
-    ) {
-      arrayData[i].quantity = x;
-      localStorage.setItem("data", JSON.stringify(arrayData));
-      location.reload();
-    }
-  }
-}
-/*function SetSelectedValue() {
-  let values = document.getElementsByClassName("quantite");
-  let x;
-  for (let i = 0; i < values.length; i++) {
-    values[i].addEventListener("change", (e) => {
-       x = e.target.value;
-       console.log(x);
-    })
-    console.log(values[i].value)
-  }
-  return x;
-}*/
-
-SetSelectedValue();
-
 function priceTotal() {
   //total price
   let totaux = document.querySelectorAll("td.totaux");
@@ -137,7 +101,7 @@ function priceTotal() {
 
 function clearItem() {
   const btnDelete = document.querySelectorAll(".delete");
-  //console.log(btnDelete);
+  console.log(btnDelete);
   // boucler sur le tableau de btn
   for (let i = 0; i < btnDelete.length; i++) {
     //crée une constante qui recupere le tableau des btn html
@@ -146,16 +110,12 @@ function clearItem() {
       //recuperer le name du produit
       console.log(arrayData);
       let nameDelete = arrayData[i].name;
-      let colorDelete = arrayData[i].color;
-      console.log("color", colorDelete);
+      console.log(nameDelete);
       //utiliser la methode filter qui boucle sur l'array et retourne un tableau des element a ne pas supprimer
-      arrayDataCheck = arrayData.filter(
-        (el) => el.color !== colorDelete || el.name !== nameDelete
-      ); //retourne un tableau des elements qui ne corespondent pas a nameDelete ni à nameColor
-      console.log("array:", arrayDataCheck);
+      arrayDataCheck = arrayData.filter((el) => el.name !== nameDelete);//retourne un tableau des elements qui ne corespondent pas a nameDelete
       //mettre le tableau retourner dans le local storage encore une fois
       localStorage.setItem("data", JSON.stringify(arrayDataCheck));
-      location.reload();
+      window.location.href = "cart.html";
     });
   }
 }
@@ -184,8 +144,7 @@ function sendDataToApi() {
       lastNameInput.value.toString().trim() &&
       validateEmail(emailInput.value).toString().trim() &&
       cityInput.value.toString().trim() &&
-      emailInput.value.toString().trim() &&
-      arrayData != null
+      emailInput.value.toString().trim() && arrayData != null
     ) {
       //create the object to send
       let objectToSend = {
@@ -200,7 +159,7 @@ function sendDataToApi() {
       };
       let jsonOrder = JSON.stringify(objectToSend);
       erreurDisplay.innerHTML = ``;
-      fetch("http://localhost:3000/api/teddies/order", {
+      fetch("https://intense-dawn-49463.herokuapp.com:3000/api/teddies/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
