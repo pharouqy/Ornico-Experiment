@@ -1,7 +1,9 @@
+const url = "http://localhost:3000";
+
 recuperer();
 
 function recuperer() {
-  fetch("http://localhost:3000/api/teddies")
+  fetch(`${url}/api/teddies`)
     .then(function (res) {
       if (res.ok) {
         return res.json();

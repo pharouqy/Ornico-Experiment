@@ -1,5 +1,5 @@
 let arrayData = JSON.parse(localStorage.getItem("data"));
-
+const url = "http://localhost:3000";
 //check input order
 const submitInput = document.getElementById("submit");
 const firstNameInput = document.getElementById("firstName");
@@ -49,7 +49,7 @@ function diplayDaata() {
             alt=""
           />
           <div class="media-body">
-            <a href="#" class="d-block text-dark name-colors">${name} -//- ${color}</a>
+            <a href="#" class="d-block text-dark name-colors" data-product="${name}-${color}">${name} -//- ${color}</a>
             <small>
               <span class="text-muted"></span>
               <span class="align-text-bottom"></span>
@@ -96,11 +96,13 @@ function SetSelectedValue() {
     console.log("x =>", x);
     let quantite = arrayData[i].quantity;
     console.log("qyt =>", quantite);
-    const compare = document.getElementsByClassName("name-colors")[i].innerHTML;
-    console.log("colors-name =>", compare);
+    //const compare = document.getElementsByClassName("name-colors")[i].innerHTML;
+    //console.log("colors-name =>", compare);
+    const dataProduct = document.getElementsByClassName("name-colors")[i].dataset.product;
+    console.log(dataProduct);
     if (
       x !== quantite &&
-      arrayData[i].name + " -//- " + arrayData[i].color === compare
+      arrayData[i].name + "-" + arrayData[i].color === dataProduct
     ) {
       arrayData[i].quantity = x;
       localStorage.setItem("data", JSON.stringify(arrayData));
@@ -179,56 +181,60 @@ function validateEmail(email) {
 
 function sendDataToApi() {
   submitInput.addEventListener("click", function (e) {
-    if (
-      firstNameInput.value.toString().trim() &&
-      lastNameInput.value.toString().trim() &&
-      validateEmail(emailInput.value).toString().trim() &&
-      cityInput.value.toString().trim() &&
-      emailInput.value.toString().trim() &&
-      arrayData != null
-    ) {
-      //create the object to send
-      let objectToSend = {
-        contact: {
-          firstName: firstNameInput.value,
-          lastName: lastNameInput.value,
-          address: adressInput.value,
-          city: cityInput.value,
-          email: emailInput.value,
-        },
-        products: tableOfIds,
-      };
-      let jsonOrder = JSON.stringify(objectToSend);
-      erreurDisplay.innerHTML = ``;
-      fetch("http://localhost:3000/api/teddies/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(objectToSend),
-      })
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-        })
-        .then((value) => {
-          localStorage.clear();
-          const orderId = localStorage.setItem("orderId", value.orderId);
-          localStorage.setItem("firstName", value.contact["firstName"]);
-          localStorage.setItem("lastName", value.contact["lastName"]);
-          const idRetrieve = localStorage.getItem("orderId");
-          window.location.href = `confirm.html?order=${idRetrieve}`;
-        })
-        .catch(function (erreur) {
-          console.log(erreur);
-        });
-    } else if (!validateEmail(emailInput.value)) {
-      erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp en vérifiant le bon format d'email</h1>`;
-    } else if (arrayData == null) {
+    if (localStorage.getItem("data") == "[]") {
+      console.log("1");
       erreurDisplay.innerHTML = `<h1>le panier est vide choisissez des produits pour valider votre commande</h1>`;
     } else {
-      erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp</h1>`;
+      if (
+        firstNameInput.value.toString().trim() &&
+        lastNameInput.value.toString().trim() &&
+        validateEmail(emailInput.value).toString().trim() &&
+        cityInput.value.toString().trim() &&
+        emailInput.value.toString().trim()
+      ) {
+        //create the object to send
+        let objectToSend = {
+          contact: {
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            address: adressInput.value,
+            city: cityInput.value,
+            email: emailInput.value,
+          },
+          products: tableOfIds,
+        };
+        let jsonOrder = JSON.stringify(objectToSend);
+        erreurDisplay.innerHTML = ``;
+        fetch(`${url}/api/teddies/order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(objectToSend),
+        })
+          .then(function (res) {
+            if (res.ok) {
+              return res.json();
+            }
+          })
+          .then((value) => {
+            localStorage.clear();
+            const orderId = localStorage.setItem("orderId", value.orderId);
+            localStorage.setItem("firstName", value.contact["firstName"]);
+            localStorage.setItem("lastName", value.contact["lastName"]);
+            const idRetrieve = localStorage.getItem("orderId");
+            window.location.href = `confirm.html?order=${idRetrieve}`;
+          })
+          .catch(function (erreur) {
+            console.log(erreur);
+          });
+      } else if (!validateEmail(emailInput.value)) {
+        erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp en vérifiant le bon format d'email</h1>`;
+        console.log("2");
+      } else {
+        erreurDisplay.innerHTML = `<h1>Remplissez tous les champs svp</h1>`;
+        console.log("3");
+      }
     }
   });
 }
